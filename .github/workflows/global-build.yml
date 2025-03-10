@@ -68,8 +68,7 @@ jobs:
           msystem: ${{ matrix.msystem }}
           install: mingw-w64-${{ matrix.toolchain }}-toolchain base-devel binutils git
           pacboy: >-
-            # aria2:p
-            # ca-certificates
+            ca-certificates
           update: true
           path-type: inherit
           #location: C:\
