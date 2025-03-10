@@ -54,7 +54,8 @@ echo "$PATH"
 #sed -i "s|RUBY=\${ruby_home}|RUBY=${rubyhm}|" PKGBUILD
 #sed -i "s|RUBY_VER=32|RUBY_VER=${rubyversion}|" PKGBUILD
 #sed -i "s|RUBY_API_VER_LONG=3.2.0|RUBY_API_VER_LONG=${rubyapiver}|" PKGBUILD
-# sed -n 's/\r//p' PKGBUILD
+sed -n 's/\r//p' PKGBUILD
+sed -i 's/\r//' PKGBUILD
 # sed -i -r 's/(ruby)[^>]*(>=)([^"]*)/\1'$rubyversion'\2'$rubyapiver'/' PKGBUILD
 # exportReplace PKGBUILD rubyversion rubyapiver rubyhm
 
