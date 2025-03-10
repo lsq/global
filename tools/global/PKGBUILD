@@ -1,0 +1,66 @@
+#Maintainer: Ma, Leon <akml@163.com>
+
+_realname=global
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=6.6.14
+pkgrel=1
+pkgdesc="GNU GLOBAL source code tagging system (mingw-w64)"
+arch=('any')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
+url='https://www.gnu.org/software/global'
+license=('GPL3')
+depends=("${MINGW_PACKAGE_PREFIX}-libwinpthread-git")
+makedepends=(
+  "${MINGW_PACKAGE_PREFIX}-cc"
+  "${MINGW_PACKAGE_PREFIX}-ncurses"
+  "${MINGW_PACKAGE_PREFIX}-autotools"
+  "${MINGW_PACKAGE_PREFIX}-gperf"
+  ${MINGW_PACKAGE_PREFIX}-7zip
+)
+source=("https://ftp.gnu.org/gnu/${_realname}/${_realname}-${pkgver}.tar.gz"{,.sig}
+        '001-global-6.6.2-mingw64.patch')
+sha256sums=('f6e7fd0b68aed292e85bb686616baf6551d5c9424adcddca11d808ba318cb320'
+            'SKIP'
+            '76ebb370824736e3630d173ec54e883657528175dd28d6e4b215c5cb1f8ac58f')
+validpgpkeys=('26F631B43D624A927E6F1C33969C3BE389DDA6EB') # Shigio YAMAGUCHI <shigio@gnu.org>
+
+_global_srcdir=${_realname}-${pkgver}
+
+prepare() {
+  cd ${_global_srcdir}
+
+  patch -p1 -i "${srcdir}"/001-global-6.6.2-mingw64.patch
+  autoconf
+  sed -i 's/\(CURSES_LIBS=".*-lncurses\)/\1 -lncursesw/' configure
+}
+
+build() {
+  mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
+
+  export CPPFLAGS="-I${MINGW_PREFIX}/include/ncurses"
+  #export CURSES_LIBS="-lncursesw"
+
+  ../${_global_srcdir}/configure \
+    --prefix=${MINGW_PREFIX} \
+    --build=${MINGW_CHOST} \
+    --host=${MINGW_CHOST} \
+    --target=${MINGW_CHOST} \
+    --with-ncurses=${MINGW_PREFIX}
+
+  mingw32-make -j 5
+}
+
+check() {
+  cd "${srcdir}"/build-${MSYSTEM}
+  mingw32-make check
+}
+
+package() {
+  cd "${srcdir}"/build-${MSYSTEM}
+  mingw32-make install DESTDIR="${pkgdir}"
+  
+  cd "${srcdir}"/../pkg/"${MINGW_PACKAGE_PREFIX}-${_realname}${MINGW_PREFIX}" || exit 1
+  7z a -mx=9 "${_global_srcdir}_x64.zip" .
+  mv "${_global_srcdir}_x64.zip" "${srcdir}"/..
+}
