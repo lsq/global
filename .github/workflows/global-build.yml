@@ -45,6 +45,7 @@ jobs:
         # id: build_version
       # - run: echo "Latest vim-mingw64 build version is ${{ steps.build_version.outputs.tag }}"
 
+      - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
 
       # - name: Early exit
