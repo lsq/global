@@ -1,5 +1,5 @@
 ### global mingw64 installer 
-[![global Build](https://github.com/lsq/global-mingw64-installer/actions/workflows/global-build.yml/badge.svg)](https://github.com/lsq/global-mingw64-installer/actions/workflows/global-build.yml)
+[![global Build](https://github.com/lsq/global/actions/workflows/global-build.yml/badge.svg)](https://github.com/lsq/global/actions/workflows/global-build.yml)
 
 - global-9.x.x_x64.zip
 - mingw-w64-ucrt-x86_64-global*.pkg.tar.xz

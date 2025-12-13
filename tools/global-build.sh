@@ -133,9 +133,10 @@ MINGW_ARCH=ucrt64 makepkg-mingw -sLf --noconfirm  --skippgpchec
 pkg="global"
 PKGVER="$newerVer"
 log="GNU"
+pkgrel=$(sed -n 's/^pkgrel=\(.*\)$/\1/p')
 # PKGVERMAJOR=$(awk -F'.' '{print $1$2}' <<<"$PKGVER")
 PKGVERMAJOR=""
-[ -f "./mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-1-any.pkg.tar.zst" ] || exit 1
+[ -f "./mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-${pkgrel}-any.pkg.tar.zst" ] || exit 1
 # interfaceInfo=$(cat src/${pkg}-"${PKGVER}"/src/if_ver.txt | sed -r -n 's/\s*(.*):\s*$/\* \1:/;3!p')
 if [ -z "$APPVEYOR_REPO_NAME" ]; then
     CI_REPO_NAME=$GITHUB_REPOSITORY
@@ -151,7 +152,7 @@ releaseLog="[![${CI_REPO_NAME}](https://img.shields.io/github/downloads/${CI_REP
 #### :unlock: Unsigned Files:
 * [![${pkg}-${PKGVER}_x64.zip](https://img.shields.io/github/downloads/${CI_REPO_NAME}/${CI_REPO_TAG_NAME}/${pkg}-${PKGVER}_x64.zip.svg?label=downloads&logo=${logo})](${URL}/${CI_REPO_TAG_NAME}/${pkg}-${PKGVER}_x64.zip)
         64-bit zip archive
-* [![${pkg}-${PKGVER}_x64.tar.zst](https://img.shields.io/github/downloads/${CI_REPO_NAME}/${CI_REPO_TAG_NAME}/mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-1-any.pkg.tar.zst.svg?label=downloads&logo=${logo})](${URL}/${CI_REPO_TAG_NAME}/mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-1-any.pkg.tar.zst)
+* [![${pkg}-${PKGVER}_x64.tar.zst](https://img.shields.io/github/downloads/${CI_REPO_NAME}/${CI_REPO_TAG_NAME}/mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-${pkgrel}-any.pkg.tar.zst.svg?label=downloads&logo=${logo})](${URL}/${CI_REPO_TAG_NAME}/mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-${pkgrel}-any.pkg.tar.zst)
         64-bit ucrt installer archive
 
 "

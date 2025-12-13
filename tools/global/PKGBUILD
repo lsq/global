@@ -4,16 +4,19 @@ _realname=global
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=6.6.14
-pkgrel=1
+pkgrel=3
 pkgdesc="GNU GLOBAL source code tagging system (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
 url='https://www.gnu.org/software/global'
 license=('GPL3')
-depends=("${MINGW_PACKAGE_PREFIX}-libwinpthread-git")
+depends=("${MINGW_PACKAGE_PREFIX}-libltdl"
+         "${MINGW_PACKAGE_PREFIX}-libsystre"
+         "${MINGW_PACKAGE_PREFIX}-ncurses"
+        )
 makedepends=(
   "${MINGW_PACKAGE_PREFIX}-cc"
-  "${MINGW_PACKAGE_PREFIX}-ncurses"
+  "${MINGW_PACKAGE_PREFIX}-pkgconf"
   "${MINGW_PACKAGE_PREFIX}-autotools"
   "${MINGW_PACKAGE_PREFIX}-gperf"
   ${MINGW_PACKAGE_PREFIX}-7zip
@@ -31,15 +34,20 @@ prepare() {
   cd ${_global_srcdir}
 
   patch -p1 -i "${srcdir}"/001-global-6.6.2-mingw64.patch
-  autoconf
-  sed -i 's/\(CURSES_LIBS=".*-lncurses\)/\1 -lncursesw/' configure
+  autoconf -fiv
+  # sed -i 's/\(CURSES_LIBS=".*-lncurses\)/\1 -lncursesw/' configure
 }
 
 build() {
   mkdir -p "${srcdir}"/build-${MSYSTEM} && cd "${srcdir}"/build-${MSYSTEM}
 
-  export CPPFLAGS="-I${MINGW_PREFIX}/include/ncurses"
+  # export CPPFLAGS="-I${MINGW_PREFIX}/include/ncurses"
   #export CURSES_LIBS="-lncursesw"
+  export lt_cv_deplibs_check_method='pass_all'
+
+  CFLAGS+=" -std=gnu17 -Wno-incompatible-pointer-types" \
+  CPPFLAGS="-I${MINGW_PREFIX}/include/ncurses" \
+  LDFLAGS="`pkgconf.exe --libs ncursesw`" \
 
   ../${_global_srcdir}/configure \
     --prefix=${MINGW_PREFIX} \
@@ -48,7 +56,7 @@ build() {
     --target=${MINGW_CHOST} \
     --with-ncurses=${MINGW_PREFIX}
 
-  mingw32-make -j 5
+  mingw32-make
 }
 
 check() {
