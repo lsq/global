@@ -133,7 +133,7 @@ MINGW_ARCH=ucrt64 makepkg-mingw -sLf --noconfirm  --skippgpchec
 pkg="global"
 PKGVER="$newerVer"
 log="GNU"
-pkgrel=$(sed -n 's/^pkgrel=\(.*\)$/\1/p')
+pkgrel=$(sed -n 's/^pkgrel=\(.*\)$/\1/p' PKGBUILD)
 # PKGVERMAJOR=$(awk -F'.' '{print $1$2}' <<<"$PKGVER")
 PKGVERMAJOR=""
 [ -f "./mingw-w64-ucrt-x86_64-${pkg}${PKGVERMAJOR}-${PKGVER}-${pkgrel}-any.pkg.tar.zst" ] || exit 1

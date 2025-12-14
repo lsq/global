@@ -79,7 +79,7 @@ diff -Naur global-6.6.14/libutil/path.c src/global-6.6.14/libutil/path.c
 +          if (b == win_path)
 +              *unix_path = '/';
 +          else
-+              *unix_path = toupper(p);
++              *unix_path = tolower(p);
 +          win_path++;
 +          unix_path++;
 +          p = n;

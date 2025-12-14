@@ -4,7 +4,7 @@ _realname=global
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=6.6.14
-pkgrel=3
+pkgrel=2
 pkgdesc="GNU GLOBAL source code tagging system (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
@@ -25,7 +25,7 @@ source=("https://ftp.gnu.org/gnu/${_realname}/${_realname}-${pkgver}.tar.gz"{,.s
         '001-global-6.6.2-mingw64.patch')
 sha256sums=('f6e7fd0b68aed292e85bb686616baf6551d5c9424adcddca11d808ba318cb320'
             'SKIP'
-            '76ebb370824736e3630d173ec54e883657528175dd28d6e4b215c5cb1f8ac58f')
+            '5d6e732d89f9a5eed65a66802cb6a4c84290a30ac36fb8aa0b537a2cb8c13c08')
 validpgpkeys=('26F631B43D624A927E6F1C33969C3BE389DDA6EB') # Shigio YAMAGUCHI <shigio@gnu.org>
 
 _global_srcdir=${_realname}-${pkgver}
@@ -45,17 +45,19 @@ build() {
   #export CURSES_LIBS="-lncursesw"
   export lt_cv_deplibs_check_method='pass_all'
 
-  CFLAGS+=" -std=gnu17 -Wno-incompatible-pointer-types" \
+  CFLAGS+=" -g -O0 -std=gnu17 -Wno-incompatible-pointer-types" \
   CPPFLAGS="-I${MINGW_PREFIX}/include/ncurses" \
-  LDFLAGS="`pkgconf.exe --libs ncursesw`" \
+  LDFLAGS="`pkgconf.exe --libs ncursesw` -Wl,--no-strip" \
+  STRIP=true \
   ../${_global_srcdir}/configure \
     --prefix=${MINGW_PREFIX} \
     --build=${MINGW_CHOST} \
     --host=${MINGW_CHOST} \
     --target=${MINGW_CHOST} \
-    --with-ncurses=${MINGW_PREFIX}
+    --with-ncurses=${MINGW_PREFIX} \
+    --disable-silent-rules
 
-  mingw32-make
+  mingw32-make STRIP=true
 }
 
 check() {
@@ -65,8 +67,8 @@ check() {
 
 package() {
   cd "${srcdir}"/build-${MSYSTEM}
-  mingw32-make install DESTDIR="${pkgdir}"
-  
+  mingw32-make install STRIP=true DESTDIR="${pkgdir}"
+ 
   cd "${srcdir}"/../pkg/"${MINGW_PACKAGE_PREFIX}-${_realname}${MINGW_PREFIX}" || exit 1
   7z a -mx=9 "${_global_srcdir}_x64.zip" .
   mv "${_global_srcdir}_x64.zip" "${srcdir}"/..
