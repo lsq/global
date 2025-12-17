@@ -4,7 +4,7 @@ _realname=global
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
 pkgver=6.6.14
-pkgrel=3
+pkgrel=4
 pkgdesc="GNU GLOBAL source code tagging system (mingw-w64)"
 arch=('any')
 mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
@@ -27,6 +27,7 @@ sha256sums=('f6e7fd0b68aed292e85bb686616baf6551d5c9424adcddca11d808ba318cb320'
             'SKIP'
             '76ebb370824736e3630d173ec54e883657528175dd28d6e4b215c5cb1f8ac58f')
 validpgpkeys=('26F631B43D624A927E6F1C33969C3BE389DDA6EB') # Shigio YAMAGUCHI <shigio@gnu.org>
+install=${_realname}.install
 
 _global_srcdir=${_realname}-${pkgver}
 
