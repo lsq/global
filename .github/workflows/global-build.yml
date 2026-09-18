@@ -4,12 +4,13 @@ on:
   # schedule:
     # - cron: "30 0/8 * * 0/2"
   workflow_dispatch:
-#    inputs:
-#      IMG_URL:    
-#        description: 'IMG_URL'
-#        required: false
-#        default: ''
-#
+    inputs:
+      VERSION:
+        type: string
+        description: 'gtags version'
+        required: false
+        default: ''
+
 jobs:
   build:
     #if: github.event.repository.owner.id == github.event.sender.id
@@ -77,15 +78,15 @@ jobs:
 
       - name: Set global build tag
         #if: ${{ "${{github.event.inputs.IMG_URL}}" }}
-        if: github.event.inputs.IMG_URL != ''
+        if: github.event.inputs.VERSION != ''
         shell: msys2 {0}
         run:
-          echo "globalTag=${{ github.event.inputs.IMG_URL }}" >> $GITHUB_ENV
+          echo "globalTag=${{ github.event.inputs.VERSION }}" >> $GITHUB_ENV
 
       # - name: Install scoop tools
       #   shell: pwsh
       #   run: .\tools\scoop_vim_install.ps1
-        
+
       - name: Build global
         shell: msys2 {0}
         run: |
