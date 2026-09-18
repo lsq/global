@@ -4,12 +4,13 @@ on:
   # schedule:
     # - cron: "30 0/8 * * 0/2"
   workflow_dispatch:
-#    inputs:
-#      IMG_URL:    
-#        description: 'IMG_URL'
-#        required: false
-#        default: ''
-#
+    inputs:
+      IMG_URL:
+        type: string
+        description: 'IMG_URL'
+        required: false
+        default: ''
+
 jobs:
   build:
     #if: github.event.repository.owner.id == github.event.sender.id
@@ -85,7 +86,7 @@ jobs:
       # - name: Install scoop tools
       #   shell: pwsh
       #   run: .\tools\scoop_vim_install.ps1
-        
+
       - name: Build global
         shell: msys2 {0}
         run: |
