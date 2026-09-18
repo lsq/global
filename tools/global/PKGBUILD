@@ -28,7 +28,7 @@ source=("https://ftp.gnu.org/gnu/${_realname}/${_realname}-${pkgver}.tar.gz"{,.s
         '001-global-6.6.2-mingw64.patch')
 sha256sums=('f6e7fd0b68aed292e85bb686616baf6551d5c9424adcddca11d808ba318cb320'
             'SKIP'
-            '76ebb370824736e3630d173ec54e883657528175dd28d6e4b215c5cb1f8ac58f')
+            '4f3aa7d89e9734e5c0c1ddc02c9bfccabf0de0088b8949a3f407116c653c7a92')
 validpgpkeys=('26F631B43D624A927E6F1C33969C3BE389DDA6EB') # Shigio YAMAGUCHI <shigio@gnu.org>
 install=${_realname}.install
 
